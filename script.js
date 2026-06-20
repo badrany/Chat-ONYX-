@@ -22,9 +22,9 @@ const logoutBtn = document.getElementById('logoutBtn');
 
 // ===== التحقق من وجود مستخدم محفوظ =====
 function loadSavedUser() {
-    const saved = localStorage.getItem('chatUser');
-    if (saved) {
-        try {
+    try {
+        const saved = localStorage.getItem('chatUser');
+        if (saved) {
             const userData = JSON.parse(saved);
             if (userData.name && userData.phone) {
                 currentUser = userData;
@@ -32,9 +32,9 @@ function loadSavedUser() {
                 enterChat();
                 return true;
             }
-        } catch (e) {
-            localStorage.removeItem('chatUser');
         }
+    } catch (e) {
+        localStorage.removeItem('chatUser');
     }
     return false;
 }
@@ -44,11 +44,9 @@ function saveUser(user) {
     localStorage.setItem('chatUser', JSON.stringify(user));
 }
 
-// ===== تسجيل الخروج المحسن =====
+// ===== تسجيل الخروج =====
 function logout() {
-    // عرض تأكيد قبل الخروج
     if (confirm('⚠️ هل أنت متأكد من تسجيل الخروج؟')) {
-        // إيقاف فحص الرسائل
         if (checkInterval) {
             clearInterval(checkInterval);
             checkInterval = null;
@@ -76,7 +74,6 @@ function enterChat() {
         chatTitle.textContent = '📞 لوحة تحكم الدعم';
         addMessage('💬 أنت الآن خدمة العملاء', 'system');
         addMessage('👥 ستظهر لك رسائل العملاء فوراً بأسمائهم', 'system');
-        // بدء فحص الرسائل الواردة للدعم
         startMessageChecking();
     } else {
         chatTitle.textContent = '💬 محادثة مع الدعم';
@@ -85,26 +82,20 @@ function enterChat() {
     }
 }
 
-// ===== بدء فحص الرسائل الواردة (لخدمة العملاء) =====
+// ===== بدء فحص الرسائل الواردة =====
 function startMessageChecking() {
     if (checkInterval) {
         clearInterval(checkInterval);
     }
     
-    // فحص كل 1.5 ثانية للرسائل الجديدة
     checkInterval = setInterval(() => {
         if (messageQueue.length > 0) {
-            // جلب جميع الرسائل في قائمة الانتظار
             const messages = [...messageQueue];
             messageQueue = [];
             
             messages.forEach(msg => {
-                // عرض رسالة العميل مع اسمه
                 addMessage(`👤 ${msg.senderName}\n${msg.text}`, 'customer');
             });
-            
-            // إشعار صوتي (اختياري)
-            // playNotificationSound();
         }
     }, 1500);
 }
@@ -143,33 +134,26 @@ loginBtn.addEventListener('click', () => {
 // ===== تسجيل الخروج =====
 logoutBtn.addEventListener('click', logout);
 
-// ===== إرسال رسالة (فورية) =====
+// ===== إرسال رسالة =====
 function sendMessage() {
     const text = msgInput.value.trim();
     if (!text) return;
 
     if (isSupport) {
-        // الدعم يرد على العميل
         addMessage('📨 ' + text, 'support');
-        // إرسال الرد للعميل (محاكاة)
         setTimeout(() => {
             addMessage('✅ تم إرسال ردك للعميل.', 'system');
         }, 300);
     } else {
-        // عميل يرسل للدعم - يظهر فوراً مع اسمه
         const customerMessage = {
             senderName: currentUser.name,
             text: text,
             timestamp: new Date().toISOString()
         };
         
-        // إضافة الرسالة لصندوق العميل
         addMessage(`🧑 ${text}`, 'customer');
-        
-        // إضافة الرسالة لقائمة انتظار الدعم (ستظهر فوراً للدعم)
         messageQueue.push(customerMessage);
         
-        // محاكاة رد تلقائي من الدعم (لتوضيح الفكرة)
         setTimeout(() => {
             addMessage('📞 (الدعم) تم استلام رسالتك، سنرد قريباً.', 'support');
         }, 500 + Math.random() * 500);
@@ -184,9 +168,7 @@ function addMessage(text, type) {
     const msgDiv = document.createElement('div');
     msgDiv.className = `message ${type}`;
     
-    // معالجة النص مع اسم المرسل للرسائل الواردة
     if (type === 'customer' && text.includes('👤')) {
-        // الرسائل الواردة من العملاء للدعم
         const parts = text.split('\n');
         if (parts.length === 2) {
             const nameSpan = document.createElement('span');
@@ -216,12 +198,14 @@ msgInput.addEventListener('keypress', (e) => {
 });
 
 // ===== تشغيل التطبيق =====
-const hasSaved = loadSavedUser();
-
-if (!hasSaved) {
-    loginScreen.style.display = 'flex';
-    chatScreen.style.display = 'none';
-}
+document.addEventListener('DOMContentLoaded', function() {
+    const hasSaved = loadSavedUser();
+    
+    if (!hasSaved) {
+        loginScreen.style.display = 'flex';
+        chatScreen.style.display = 'none';
+    }
+});
 
 // ===== تنظيف عند إغلاق الصفحة =====
 window.addEventListener('beforeunload', () => {
@@ -230,4 +214,4 @@ window.addEventListener('beforeunload', () => {
     }
 });
 
-console.log('✅ شات خدمة العملاء - نسخة فورية مع عرض اسم العميل');
+console.log('✅ شات خدمة العملاء - يعمل بنجاح');
