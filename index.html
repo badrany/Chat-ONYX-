@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شات خدمة العملاء - بنفسجي</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="logo-wrapper">
+                    <img src="12.png" alt="Logo" class="logo-circle">
+                    <div class="logo-glow"></div>
+                </div>
+                <h1 class="login-title">مرحباً بك</h1>
+                <p class="login-subtitle">سجل الدخول للمحادثة</p>
+                
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="الاسم الكامل" required>
+                    <span class="input-icon">👤</span>
+                </div>
+                
+                <div class="input-group">
+                    <input type="text" id="phone" placeholder="رقم الهاتف" required>
+                    <span class="input-icon">📱</span>
+                </div>
+                
+                <button id="loginBtn" class="login-btn">
+                    <span>دخول</span>
+                    <span class="btn-icon">→</span>
+                </button>
+                
+                <p id="errorMsg" class="error-msg">⚠️ الرجاء إدخال البيانات بشكل صحيح</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- واجهة المحادثة -->
+    <div id="chatScreen" class="chat-screen" style="display:none;">
+        <div class="chat-header">
+            <div class="header-left">
+                <img src="12.png" alt="Logo" class="small-logo">
+                <div class="header-info">
+                    <span id="chatTitle" class="chat-title">خدمة العملاء</span>
+                    <span class="online-status">🟢 متصل</span>
+                </div>
+            </div>
+            <button id="logoutBtn" class="logout-btn" title="تسجيل الخروج">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div id="messagesBox" class="messages-box"></div>
+        
+        <div class="chat-input-wrapper">
+            <div class="chat-input-container">
+                <input type="text" id="msgInput" placeholder="اكتب رسالتك..." class="chat-input">
+                <button id="sendBtn" class="send-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
